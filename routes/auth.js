@@ -28,23 +28,27 @@ router.post("/signup", async (req, res) => {
 
     res.json({ token, user });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error("Signup error:", err.message);
+    res.status(500).json({ error: "Server error" });
   }
 });
 
 // Login Route
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
+  console.log("Login attempt:", email);
 
   try {
     const result = await db.query("SELECT * FROM users WHERE email = $1", [email]);
     if (result.rows.length === 0) {
+      console.log("User not found");
       return res.status(400).json({ error: "Invalid credentials" });
     }
 
     const user = result.rows[0];
     const valid = await bcrypt.compare(password, user.password);
     if (!valid) {
+      console.log("Incorrect password");
       return res.status(400).json({ error: "Invalid credentials" });
     }
 
@@ -52,7 +56,8 @@ router.post("/login", async (req, res) => {
 
     res.json({ token, user: { id: user.id, name: user.name, email: user.email } });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error("Login error:", err.message);
+    res.status(500).json({ error: "Server error" });
   }
 });
 
