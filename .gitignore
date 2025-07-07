@@ -1,0 +1,21 @@
+# dependencies
+node_modules/
+
+# environment variables
+.env
+
+# logs
+logs/
+*.log
+npm-debug.log*
+
+# database
+*.sqlite
+*.sqlite3
+
+# build
+dist/
+build/
+
+# misc
+.DS_Store
