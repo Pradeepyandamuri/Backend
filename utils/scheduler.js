@@ -18,7 +18,7 @@ function scheduleTaskReminders() {
         console.log(`   ${task.title} | Due: ${task.due_date} | Email: ${task.user_email} | Reminded: ${task.reminded}`);
       });
 
-      //  Check for tasks due in the next hour
+      // Check for tasks due in the next hour
       const result = await db.query(`
         SELECT * FROM tasks
         WHERE due_date BETWEEN NOW() AND NOW() + INTERVAL '1 hour'
@@ -52,11 +52,11 @@ function scheduleTaskReminders() {
           await db.query("UPDATE tasks SET reminded = true WHERE id = $1", [task.id]);
           console.log(` Task ID ${task.id} marked as reminded`);
         } catch (emailError) {
-          console.error(` Email failed to ${task.user_email}:`, emailError.message);
+          console.error(` Email failed to ${task.user_email}:`, emailError);
         }
       }
     } catch (err) {
-      console.error(" Scheduler error:", err.message);
+      console.error(" Scheduler error:", err); // ✅ Full error logged
     }
   });
 }
